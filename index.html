@@ -1,0 +1,83 @@
+<!DOCTYPE HTML>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" \>
+    <title>EntitifyIt</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" \>
+    <meta name="description" content="Simple tool for cleaning code with character entities" \>
+
+    <style>
+      * {padding: 0; margin: 0;}
+      body {
+        font: 100%/1.2 "Century Gothic", "Gill Sans", "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif;
+        color: #FFF;
+        background: #2C3E50 url(backgd.svg) bottom repeat-x;
+        padding-bottom: 4rem;
+        margin: 5vh 5%;
+      }
+      h1 {font-size: 3vmax; margin-bottom: 2rem;}
+      p {font-size: 1.3em;}
+      label {display: block; margin-bottom: 0.5em;}
+      p + p {margin-top: 2rem;}
+      button {
+        font: 100%/1.2 "Century Gothic", "Gill Sans", "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif;
+        background: rgba(255,255,255,0);
+        border: none;
+        cursor: pointer;
+      }
+      #container {max-width: 1000px; text-align: center; margin: 0 auto;}
+      #the-submit {
+        color: #FFF;
+        background-color: #B51100;
+        padding: 0.5em 1em;
+        border-radius: 0.3em;
+      }
+      button[data-clipboard-action="copy"] {font-size: 80%; color: #FFF;}
+    </style>
+
+  </head>
+
+  <body>
+
+    <div id="container">
+        <h1>EntitifyIt</h1>
+
+        <form method="post" action="#">
+          <p><label for="the-input">Original code</label> <textarea id="the-input" rows="10" cols="50"></textarea></p>
+          <p><button type="button" id="the-submit">Entitify it!</button></p>
+          <p><label for="the-output">Entitified Code</label> <textarea id="the-output" rows="10" cols="50" disabled="disabled"></textarea></p>
+          <p><button type="button" class="c2c" data-clipboard-action="copy" data-clipboard-target="#the-output">Copy</button></p>
+        </form>
+    </div>
+
+  </body>
+
+  <script src="clipboard.min.js"></script>
+  <script>
+    var clipboard = new Clipboard('.c2c');
+
+    let charArray = ["<", ">", "{", "}", "\"", " & "];
+    let entArray = ["&lt;", "&gt;", "&#123;", "&#125;", "&#34;", "&amp;"];
+    let zInput = document.getElementById('the-input');
+    let zOutput = document.getElementById('the-output');
+    let zSubmit = document.getElementById('the-submit');
+
+    var theString;
+    var newString;
+
+    zSubmit.addEventListener('click', function() {
+      theString = zInput.value;
+      for(i = 0; i < charArray.length; i++) {
+        var pp = new RegExp(charArray[i], 'g');
+        theString = theString.replace(pp,entArray[i]);
+        console.log(theString);
+      }
+      zOutput.removeAttribute('disabled');
+      zOutput.value = theString;
+    });
+
+
+  </script>
+
+</html>

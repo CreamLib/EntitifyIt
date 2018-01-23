@@ -12,10 +12,21 @@
       body {
         font: 100%/1.2 "Century Gothic", "Gill Sans", "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif;
         color: #FFF;
-        background: #2C3E50 url(backgd.svg) bottom repeat-x;
+        background-color: #2C3E50;
         padding-bottom: 4rem;
         margin: 5vh 5%;
       }
+      body::after {
+        display: block;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 90px;
+        content: "";
+        background: #2C3E50 url(backgd.svg) bottom repeat-x;
+      }
+
       h1 {font-size: 3vmax; margin-bottom: 2rem;}
       p {font-size: 1.3em;}
       label {display: block; margin-bottom: 0.5em;}
@@ -26,14 +37,55 @@
         border: none;
         cursor: pointer;
       }
-      #container {max-width: 1000px; text-align: center; margin: 0 auto;}
+      #container {text-align: center; margin: 0 auto;}
       #the-submit {
         color: #FFF;
         background-color: #B51100;
         padding: 0.5em 1em;
         border-radius: 0.3em;
       }
-      button[data-clipboard-action="copy"] {font-size: 80%; color: #FFF;}
+      button[data-clipboard-action="copy"] {
+        display: block;
+        width: 100%;
+        text-align: center;
+        font-size: 80%;
+        text-transform: uppercase;
+        color: #FFF;
+        padding: 0.5em 0;
+      }
+      textarea {width: 90%;}
+      #container form p:nth-child(2) {position: relative;}
+      #container form p:nth-child(2)::after {
+        display: block;
+        position: absolute;
+        bottom: -10px;
+        left: 50%;
+        width: 20px;
+        height: 20px;
+        content: "";
+        background-color: #B51100;
+        margin-left: -10px;
+        transform: rotate(45deg);
+        transition: all 1s;
+      }
+
+
+      @media screen and (min-width: 1500px) {
+        #container form {
+          display: flex;
+          justify-content: space-around;
+          align-items: center;
+        }
+        #container form p:nth-child(1), #container form p:nth-child(3) {flex: 1 0 45%;}
+        #container form p:nth-child(2)::after {
+          top: 50%;
+          right: -10px;
+          bottom: auto;
+          left: auto;
+          margin-left: 0;
+          margin-top: -10px;
+        }
+      }
     </style>
 
   </head>
@@ -44,10 +96,10 @@
         <h1>EntitifyIt</h1>
 
         <form method="post" action="#">
-          <p><label for="the-input">Original code</label> <textarea id="the-input" rows="10" cols="50"></textarea></p>
+          <p><label for="the-input">Original code</label> <textarea id="the-input" rows="15" cols="50"></textarea></p>
           <p><button type="button" id="the-submit">Entitify it!</button></p>
-          <p><label for="the-output">Entitified Code</label> <textarea id="the-output" rows="10" cols="50" disabled="disabled"></textarea></p>
-          <p><button type="button" class="c2c" data-clipboard-action="copy" data-clipboard-target="#the-output">Copy</button></p>
+          <p><label for="the-output">Entitified Code</label> <textarea id="the-output" rows="15" cols="50" disabled="disabled"></textarea>
+            <button type="button" class="c2c" data-clipboard-action="copy" data-clipboard-target="#the-output">[Copy]</button></p>
         </form>
     </div>
 
@@ -57,8 +109,8 @@
   <script>
     var clipboard = new Clipboard('.c2c');
 
-    let charArray = ["<", ">", "{", "}", "\"", " & "];
-    let entArray = ["&lt;", "&gt;", "&#123;", "&#125;", "&#34;", "&amp;"];
+    let charArray = ["<", ">", "{", "}", "\"", " & ", "\'", "\`"];
+    let entArray = ["&lt;", "&gt;", "&#123;", "&#125;", "&#34;", "&amp;", "&apos;", "&#96;"];
     let zInput = document.getElementById('the-input');
     let zOutput = document.getElementById('the-output');
     let zSubmit = document.getElementById('the-submit');
